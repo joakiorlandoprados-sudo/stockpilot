@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockPilot — Inventory Management API</title>
+<meta name="description" content="Professional REST API for inventory and product management. Built with Node.js, Express, MongoDB and JWT authentication.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Epilogue:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Stock<span>Pilot</span></a>
+  <ul class="nav-links">
+    <li><a href="#endpoints">Endpoints</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#readme">README</a></li>
+  </ul>
+  <a href="https://github.com/YOUR_USERNAME/stockpilot" target="_blank" class="nav-cta">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    View on GitHub
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-pre">Portfolio Project · Backend API</p>
+  <h1>
+    Stock
+    <span class="line2">Pilot</span>
+  </h1>
+  <p class="hero-sub">
+    A <strong>professional REST API</strong> for inventory and product management. Built with clean architecture, JWT authentication, advanced filtering, and interactive Swagger documentation.
+  </p>
+  <div class="hero-actions">
+    <a href="https://github.com/YOUR_USERNAME/stockpilot" target="_blank" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      View Source Code
+    </a>
+    <a href="#endpoints" class="btn-secondary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
+      Explore API
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num">14</span>
+      <span class="stat-label">Endpoints</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">JWT</span>
+      <span class="stat-label">Auth</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">7+</span>
+      <span class="stat-label">Query Filters</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">/docs</span>
+      <span class="stat-label">Swagger UI</span>
+    </div>
+  </div>
+</section>
+
+<!-- TERMINAL -->
+<section class="terminal-section reveal">
+  <div class="terminal-wrap">
+    <div class="terminal-bar">
+      <div class="dot r"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+      <span class="terminal-title">bash — stockpilot/</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">~/stockpilot $</span> <span class="t-cmd">npm run dev</span></div>
+      <div style="color:#3d5068">————————————————————————————————————</div>
+      <div><span class="t-comment"># nodemon watching for changes...</span></div>
+      <div style="color:var(--green)">✓  Connected to MongoDB</div>
+      <div style="color:var(--cyan)">⚡ Server running on http://localhost:3000</div>
+      <div style="color:var(--text2)">📄 API Docs available at http://localhost:3000/api/docs</div>
+      <br>
+      <div><span class="t-prompt">~/stockpilot $</span> <span class="t-cmd">curl -s http://localhost:3000/api/products?search=keyboard&limit=2</span></div>
+      <br>
+      <div>{</div>
+      <div>&nbsp;&nbsp;<span class="t-key">"success"</span>: <span class="t-bool">true</span>,</div>
+      <div>&nbsp;&nbsp;<span class="t-key">"data"</span>: [</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="t-key">"name"</span>: <span class="t-str">"Mechanical Keyboard RGB"</span>, <span class="t-key">"sku"</span>: <span class="t-str">"KB-001"</span>, <span class="t-key">"price"</span>: <span class="t-num">89.99</span>, <span class="t-key">"stock"</span>: <span class="t-num">47</span> },</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="t-key">"name"</span>: <span class="t-str">"Wireless Compact Keyboard"</span>, <span class="t-key">"sku"</span>: <span class="t-str">"KB-002"</span>, <span class="t-key">"price"</span>: <span class="t-num">59.99</span>, <span class="t-key">"stock"</span>: <span class="t-num">22</span> }</div>
+      <div>&nbsp;&nbsp;],</div>
+      <div>&nbsp;&nbsp;<span class="t-key">"pagination"</span>: { <span class="t-key">"total"</span>: <span class="t-num">8</span>, <span class="t-key">"page"</span>: <span class="t-num">1</span>, <span class="t-key">"limit"</span>: <span class="t-num">2</span>, <span class="t-key">"totalPages"</span>: <span class="t-num">4</span> }</div>
+      <div>}</div>
+      <br>
+      <div><span class="t-status-ok">200 OK</span> <span class="t-comment">— 34ms</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ENDPOINTS -->
+<section class="demo-section reveal" id="endpoints">
+  <div class="section-label">// 03 — API Reference</div>
+  <h2 class="section-title">Endpoints</h2>
+  <p class="section-sub">Click any endpoint to preview the response format.</p>
+
+  <div class="ep-demo">
+    <div class="ep-list" id="epList">
+      <!-- Injected by JS -->
+    </div>
+    <div class="ep-response">
+      <div class="ep-res-bar">
+        <span class="ep-res-title" id="resTitle">GET /api/products</span>
+        <span class="status-pill">200 OK</span>
+      </div>
+      <div class="ep-res-body" id="resBody"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section class="arch-section reveal" id="architecture">
+  <div class="section-label">// 01 — Project Structure</div>
+  <h2 class="section-title">Architecture</h2>
+  <p class="section-sub">Clean separation of concerns. Every layer has one job.</p>
+
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-icon" style="background:rgba(0,229,255,0.08)">🗺️</div>
+      <h3>Routes</h3>
+      <p>Map HTTP methods and URLs to controller functions. Zero business logic.</p>
+      <div class="arch-files">
+        <span class="file-tag">authRoutes.js</span>
+        <span class="file-tag">productRoutes.js</span>
+        <span class="file-tag">categoryRoutes.js</span>
+      </div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:rgba(0,255,136,0.08)">🧠</div>
+      <h3>Controllers</h3>
+      <p>All business logic lives here. Reads requests, queries models, sends responses.</p>
+      <div class="arch-files">
+        <span class="file-tag">authController.js</span>
+        <span class="file-tag">productController.js</span>
+        <span class="file-tag">categoryController.js</span>
+      </div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:rgba(177,108,255,0.08)">🛡️</div>
+      <h3>Middlewares</h3>
+      <p>JWT verification, global error handling, and request validation run before controllers.</p>
+      <div class="arch-files">
+        <span class="file-tag">auth.js</span>
+        <span class="file-tag">errorHandler.js</span>
+        <span class="file-tag">validate.js</span>
+      </div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:rgba(255,184,0,0.08)">🗄️</div>
+      <h3>Models</h3>
+      <p>Mongoose schemas define data shape, types, constraints and relationships.</p>
+      <div class="arch-files">
+        <span class="file-tag">User.js</span>
+        <span class="file-tag">Product.js</span>
+        <span class="file-tag">Category.js</span>
+      </div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:rgba(255,77,77,0.08)">🔧</div>
+      <h3>Utils</h3>
+      <p>Shared helper functions: standard API responses and dynamic filter builder.</p>
+      <div class="arch-files">
+        <span class="file-tag">apiResponse.js</span>
+        <span class="file-tag">buildFilter.js</span>
+      </div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:rgba(0,229,255,0.08)">⚙️</div>
+      <h3>Config</h3>
+      <p>MongoDB connection and Swagger/OpenAPI documentation setup.</p>
+      <div class="arch-files">
+        <span class="file-tag">db.js</span>
+        <span class="file-tag">swagger.js</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section class="stack-section reveal" id="stack">
+  <div class="section-label">// 02 — Tech Stack</div>
+  <h2 class="section-title">Built With</h2>
+  <p class="section-sub">Production-grade tools, zero bloat.</p>
+
+  <div class="stack-grid">
+    <div class="stack-card">
+      <div class="stack-name" style="color:var(--green)">Node.js</div>
+      <div class="stack-role">Runtime</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name" style="color:#aaa">Express</div>
+      <div class="stack-role">HTTP Framework</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name" style="color:#4db35a">MongoDB</div>
+      <div class="stack-role">Database</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name" style="color:#e9501a">Mongoose</div>
+      <div class="stack-role">ODM / Schemas</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name" style="color:var(--purple)">JWT</div>
+      <div class="stack-role">Authentication</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name" style="color:var(--cyan)">Swagger</div>
+      <div class="stack-role">Documentation</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name" style="color:var(--amber)">bcrypt</div>
+      <div class="stack-role">Password Hashing</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name" style="color:#f06292">Helmet</div>
+      <div class="stack-role">Security Headers</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section reveal">
+  <div class="section-label">// 04 — Capabilities</div>
+  <h2 class="section-title">What it does</h2>
+  <p class="section-sub">Every feature built with real-world production patterns.</p>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-num">01</div>
+      <h3>Full CRUD</h3>
+      <p>Create, read, update and delete products and categories with consistent response structure across all endpoints.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">02</div>
+      <h3>Advanced Filtering</h3>
+      <p>Filter by category, price range, stock level, tags, and active status. Combine filters freely via query params.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">03</div>
+      <h3>Pagination & Search</h3>
+      <p>Cursor-style pagination with configurable limits. Full-text search via MongoDB regex on name and description.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">04</div>
+      <h3>JWT Authentication</h3>
+      <p>Stateless auth via signed tokens. Role-based access control separates public reads from admin writes.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">05</div>
+      <h3>Error Middleware</h3>
+      <p>Global handler normalizes every error — Mongoose, JWT, validation, duplicates — into consistent JSON responses.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">06</div>
+      <h3>Swagger Docs</h3>
+      <p>Auto-generated interactive docs at <code>/api/docs</code>. Every endpoint, parameter, and response is documented.</p>
+    </div>
+  </div>
+</section>
+
+<!-- README -->
+<section class="readme-section reveal" id="readme">
+  <div class="section-label">// 05 — Documentation</div>
+  <h2 class="section-title" style="margin-bottom:12px">README</h2>
+  <p class="section-sub">As it appears on GitHub.</p>
+
+  <div class="readme-wrap" style="margin-top:48px">
+    <div class="readme-bar">
+      <div class="readme-bar-left">
+        <svg class="readme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <span class="readme-bar-title">README.md</span>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Preview</div>
+    </div>
+    <div class="readme-content">
+      <h1>📦 StockPilot — Inventory Management API</h1>
+      <div class="badges">
+        <span class="badge node">Node.js</span>
+        <span class="badge express">Express</span>
+        <span class="badge mongo">MongoDB</span>
+        <span class="badge v">v1.0.0</span>
+        <span class="badge mit">MIT License</span>
+      </div>
+
+      <p>A production-grade REST API for inventory and product management. Designed with clean architecture, JWT authentication, advanced filtering, pagination, and interactive Swagger documentation.</p>
+
+      <h2>🚀 Features</h2>
+      <ul>
+        <li>Full CRUD for products and categories</li>
+        <li>JWT authentication with role-based access control (admin/user)</li>
+        <li>Advanced filtering: price range, stock, tags, search, category</li>
+        <li>Pagination and sorting on all list endpoints</li>
+        <li>Logical delete (soft delete) preserving data integrity</li>
+        <li>Global error handling middleware with standardized responses</li>
+        <li>Input validation via <code>express-validator</code></li>
+        <li>Interactive API docs at <code>/api/docs</code></li>
+      </ul>
+
+      <h2>⚙️ Installation</h2>
+      <div class="install-block">
+        <div><span style="color:var(--text3)">#</span> <span style="color:var(--text2)">Clone the repo</span></div>
+        <div>git clone https://github.com/YOUR_USERNAME/stockpilot.git</div>
+        <br>
+        <div><span style="color:var(--text3)">#</span> <span style="color:var(--text2)">Install dependencies</span></div>
+        <div>npm install</div>
+        <br>
+        <div><span style="color:var(--text3)">#</span> <span style="color:var(--text2)">Set up environment variables</span></div>
+        <div>cp .env.example .env</div>
+        <br>
+        <div><span style="color:var(--text3)">#</span> <span style="color:var(--text2)">Start dev server</span></div>
+        <div><span style="color:var(--cyan)">npm run dev</span></div>
+      </div>
+
+      <h2>🔐 Authentication</h2>
+      <p>All write operations require a Bearer token in the request header:</p>
+      <div class="install-block">
+        Authorization: Bearer <span style="color:var(--cyan)">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+      </div>
+
+      <h2>📚 Main Endpoints</h2>
+      <table class="ep-table">
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td style="color:var(--green)">POST</td><td>/api/auth/register</td><td>Register user</td><td>—</td></tr>
+        <tr><td style="color:var(--green)">POST</td><td>/api/auth/login</td><td>Login, get token</td><td>—</td></tr>
+        <tr><td style="color:var(--cyan)">GET</td><td>/api/products</td><td>List + filters</td><td>—</td></tr>
+        <tr><td style="color:var(--green)">POST</td><td>/api/products</td><td>Create product</td><td>admin</td></tr>
+        <tr><td style="color:var(--amber)">PUT</td><td>/api/products/:id</td><td>Update product</td><td>admin</td></tr>
+        <tr><td style="color:var(--red)">DELETE</td><td>/api/products/:id</td><td>Soft delete</td><td>admin</td></tr>
+      </table>
+
+      <h2>📖 API Documentation</h2>
+      <p>Run the server and navigate to <code>http://localhost:3000/api/docs</code> for the full interactive Swagger UI.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="logo">StockPilot</div>
+    <p>Professional REST API for inventory management. A portfolio project demonstrating backend architecture, clean code, and API design.</p>
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/YOUR_USERNAME/stockpilot" target="_blank">GitHub Repository →</a>
+    <a href="#endpoints">API Endpoints</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#readme">Documentation</a>
+  </div>
+  <div class="footer-copy">
+    <span>Built by Joaquin · Node.js + Express + MongoDB</span>
+    <span>MIT License</span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,2388 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.env.example
+.gitignore
+package.json
+README.md
+server.js
+src/app.js
+src/config/db.js
+src/config/swagger.js
+src/controllers/authController.js
+src/controllers/categoryController.js
+src/controllers/productController.js
+src/middlewares/auth.js
+src/middlewares/errorHandler.js
+src/middlewares/paginate.js
+src/middlewares/validate.js
+src/models/Category.js
+src/models/Product.js
+src/models/User.js
+src/routes/authRoutes.js
+src/routes/categoryRoutes.js
+src/routes/productRoutes.js
+src/utils/apiResponse.js
+src/utils/buildFilter.js
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".env.example">
+PORT=3000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/stockpilot
+JWT_SECRET=tu_secreto_super_seguro
+JWT_EXPIRES_IN=7d
+</file>
+
+<file path=".gitignore">
+node_modules/
+.env
+.npm-cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage/
+dist/
+</file>
+
+<file path="package.json">
+{
+  "name": "stockpilot",
+  "version": "1.0.0",
+  "description": "Professional inventory management REST API built with Node.js, Express, MongoDB, JWT, and Swagger.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "inventory",
+    "express",
+    "mongodb",
+    "jwt",
+    "swagger",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.0",
+    "morgan": "^1.10.0",
+    "slugify": "^1.6.6",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
+</file>
+
+<file path="README.md">
+# StockPilot - Inventory Management API
+
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/Auth-JWT-D63AFF)
+![Swagger](https://img.shields.io/badge/Docs-Swagger-85EA2D?logo=swagger&logoColor=black)
+
+## 📋 Description
+
+StockPilot is a professional REST API for inventory and product management. It provides secure JWT authentication, product and category administration, soft deletion, filtering with pagination, and interactive OpenAPI documentation so teams can integrate and test the platform quickly.
+
+## 🚀 Features
+
+- 🔐 JWT authentication with role-based access control
+- 📦 Product CRUD with soft delete and stock-only updates
+- 🗂️ Category management with slug generation and product safety checks
+- 🔎 Search, filters, sorting, tags, and pagination for products
+- 🛡️ Centralized validation and global error handling
+- 📖 Swagger UI documentation for every endpoint
+- ⚙️ Environment-based configuration ready for local development
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+| --- | --- |
+| Node.js | JavaScript runtime for the backend |
+| Express | HTTP server and routing |
+| MongoDB | Persistent data store |
+| Mongoose | ODM for schemas, validation, and queries |
+| JWT | Stateless authentication |
+| express-validator | Request validation |
+| Swagger / OpenAPI | API documentation |
+
+## ⚙️ Installation
+
+1. Clone the repository or open this project folder.
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create your environment file:
+
+```bash
+cp .env.example .env
+```
+
+4. Update `.env` with your local MongoDB connection and JWT secret.
+5. Start the development server:
+
+```bash
+npm run dev
+```
+
+6. Open the API in your browser at `http://localhost:3000`.
+
+## 🔐 Authentication
+
+StockPilot uses JWT Bearer tokens. Register or log in to receive a token, then include it in protected requests:
+
+```http
+Authorization: Bearer <your_jwt_token>
+```
+
+Admin-only routes require a token whose payload includes `role: "admin"`.
+
+## 📚 API Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+| --- | --- | --- | --- |
+| POST | `/api/auth/register` | Register a new user and receive a JWT | No |
+| POST | `/api/auth/login` | Authenticate a user and receive a JWT | No |
+| GET | `/api/products` | List products with filters, search, sorting, and pagination | No |
+| GET | `/api/products/:id` | Get one active product | No |
+| POST | `/api/products` | Create a product | Admin |
+| PUT | `/api/products/:id` | Update a product | Admin |
+| DELETE | `/api/products/:id` | Soft delete a product by setting `active: false` | Admin |
+| PATCH | `/api/products/:id/stock` | Update product stock only | Admin |
+| GET | `/api/categories` | List active categories | No |
+| GET | `/api/categories/:id` | Get one category with its active products | No |
+| POST | `/api/categories` | Create a category | Admin |
+| PUT | `/api/categories/:id` | Update a category | Admin |
+| DELETE | `/api/categories/:id` | Soft delete a category if it has no products | Admin |
+
+## 📖 API Documentation
+
+Swagger UI is available after starting the server:
+
+```text
+GET /api/docs
+```
+
+Open [http://localhost:3000/api/docs](http://localhost:3000/api/docs) in your browser to explore schemas, request examples, query filters, and possible responses.
+
+## 📁 Project Structure
+
+```text
+stockpilot/
+├── src/
+│   ├── config/
+│   │   ├── db.js               # MongoDB connection
+│   │   └── swagger.js          # OpenAPI configuration
+│   ├── controllers/
+│   │   ├── authController.js   # Registration and login logic
+│   │   ├── categoryController.js
+│   │   └── productController.js
+│   ├── middlewares/
+│   │   ├── auth.js             # JWT auth and role authorization
+│   │   ├── errorHandler.js     # Global error formatter
+│   │   ├── paginate.js         # Pagination helper
+│   │   └── validate.js         # express-validator wrapper
+│   ├── models/
+│   │   ├── Category.js
+│   │   ├── Product.js
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── authRoutes.js       # Auth endpoints + Swagger docs
+│   │   ├── categoryRoutes.js   # Category endpoints + Swagger docs
+│   │   └── productRoutes.js    # Product endpoints + Swagger docs
+│   ├── utils/
+│   │   ├── apiResponse.js      # Standard success/error payloads
+│   │   └── buildFilter.js      # Dynamic product query builder
+│   └── app.js                  # Express application instance
+├── .env.example
+├── .gitignore
+├── package.json
+├── README.md
+└── server.js
+```
+
+## 🧪 Testing with Postman
+
+1. Import the endpoints manually or from Swagger using `http://localhost:3000/api/docs`.
+2. Register a user and log in to get a JWT token.
+3. Add the token to a Postman environment variable and reuse it in the `Authorization` header.
+4. Create categories first, then create products referencing category IDs.
+5. Test filters like `search`, `tags`, `minPrice`, `maxPrice`, `page`, and `limit` from the products collection.
+
+## 📝 License
+
+MIT
+</file>
+
+<file path="server.js">
+require("dotenv").config();
+
+const app = require("./src/app");
+const connectDB = require("./src/config/db");
+
+const PORT = process.env.PORT || 3000;
+
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`StockPilot API listening on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
+</file>
+
+<file path="src/app.js">
+const cors = require("cors");
+const express = require("express");
+const helmet = require("helmet");
+const morgan = require("morgan");
+
+const { setupSwagger } = require("./config/swagger");
+const errorHandler = require("./middlewares/errorHandler");
+const authRoutes = require("./routes/authRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const productRoutes = require("./routes/productRoutes");
+
+const app = express();
+
+app.use(helmet());
+app.use(cors());
+app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+setupSwagger(app);
+
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
+
+app.use((req, res, next) => {
+  const error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
+  error.statusCode = 404;
+  next(error);
+});
+
+app.use(errorHandler);
+
+module.exports = app;
+</file>
+
+<file path="src/config/db.js">
+const mongoose = require("mongoose");
+
+const connectDB = async () => {
+  const mongoUri = process.env.MONGODB_URI;
+
+  if (!mongoUri) {
+    throw new Error("MONGODB_URI is not defined");
+  }
+
+  await mongoose.connect(mongoUri);
+  console.log("MongoDB connected successfully");
+};
+
+module.exports = connectDB;
+</file>
+
+<file path="src/config/swagger.js">
+const path = require("path");
+
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const options = {
+  definition: {
+    openapi: "3.0.3",
+    info: {
+      title: "StockPilot API",
+      version: "1.0.0",
+      description: "Professional REST API for inventory, products, categories, and JWT authentication."
+    },
+    servers: [
+      {
+        url: "http://localhost:3000",
+        description: "Local development server"
+      }
+    ],
+    tags: [
+      { name: "Auth", description: "Authentication endpoints" },
+      { name: "Products", description: "Inventory and product management" },
+      { name: "Categories", description: "Category management endpoints" }
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT"
+        }
+      },
+      schemas: {
+        User: {
+          type: "object",
+          properties: {
+            _id: { type: "string", example: "6643844f3d7f95fb678e4147" },
+            name: { type: "string", example: "Jane Doe" },
+            email: { type: "string", format: "email", example: "jane@stockpilot.dev" },
+            role: { type: "string", enum: ["admin", "user"], example: "admin" },
+            createdAt: { type: "string", format: "date-time" }
+          }
+        },
+        RegisterInput: {
+          type: "object",
+          required: ["name", "email", "password"],
+          properties: {
+            name: { type: "string", example: "Jane Doe" },
+            email: { type: "string", format: "email", example: "jane@stockpilot.dev" },
+            password: { type: "string", format: "password", example: "secret123" },
+            role: { type: "string", enum: ["admin", "user"], example: "admin" }
+          }
+        },
+        LoginInput: {
+          type: "object",
+          required: ["email", "password"],
+          properties: {
+            email: { type: "string", format: "email", example: "jane@stockpilot.dev" },
+            password: { type: "string", format: "password", example: "secret123" }
+          }
+        },
+        Category: {
+          type: "object",
+          properties: {
+            _id: { type: "string", example: "664383f53d7f95fb678e4144" },
+            name: { type: "string", example: "Electronics" },
+            description: { type: "string", example: "Devices and gadgets" },
+            slug: { type: "string", example: "electronics" },
+            active: { type: "boolean", example: true }
+          }
+        },
+        CategoryInput: {
+          type: "object",
+          required: ["name"],
+          properties: {
+            name: { type: "string", example: "Electronics" },
+            description: { type: "string", example: "Devices and gadgets" },
+            active: { type: "boolean", example: true }
+          }
+        },
+        Product: {
+          type: "object",
+          properties: {
+            _id: { type: "string", example: "6643851a3d7f95fb678e4148" },
+            name: { type: "string", example: "Mechanical Keyboard" },
+            description: { type: "string", example: "Compact 75% wireless keyboard" },
+            sku: { type: "string", example: "KEY-001" },
+            price: { type: "number", example: 129.99 },
+            stock: { type: "integer", example: 25 },
+            category: {
+              oneOf: [
+                { type: "string", example: "664383f53d7f95fb678e4144" },
+                { $ref: "#/components/schemas/Category" }
+              ]
+            },
+            tags: {
+              type: "array",
+              items: { type: "string" },
+              example: ["electronics", "offer"]
+            },
+            active: { type: "boolean", example: true },
+            createdAt: { type: "string", format: "date-time" },
+            updatedAt: { type: "string", format: "date-time" }
+          }
+        },
+        ProductInput: {
+          type: "object",
+          required: ["name", "sku", "price", "stock"],
+          properties: {
+            name: { type: "string", example: "Mechanical Keyboard" },
+            description: { type: "string", example: "Compact 75% wireless keyboard" },
+            sku: { type: "string", example: "KEY-001" },
+            price: { type: "number", example: 129.99 },
+            stock: { type: "integer", example: 25 },
+            category: { type: "string", example: "664383f53d7f95fb678e4144" },
+            tags: {
+              type: "array",
+              items: { type: "string" },
+              example: ["electronics", "offer"]
+            },
+            active: { type: "boolean", example: true }
+          }
+        },
+        StockUpdateInput: {
+          type: "object",
+          required: ["stock"],
+          properties: {
+            stock: { type: "integer", minimum: 0, example: 42 }
+          }
+        },
+        SuccessResponse: {
+          type: "object",
+          properties: {
+            success: { type: "boolean", example: true },
+            message: { type: "string", example: "Request completed successfully" },
+            data: { type: "object" }
+          }
+        },
+        PaginatedProductsResponse: {
+          type: "object",
+          properties: {
+            success: { type: "boolean", example: true },
+            data: {
+              type: "array",
+              items: { $ref: "#/components/schemas/Product" }
+            },
+            pagination: {
+              type: "object",
+              properties: {
+                total: { type: "integer", example: 120 },
+                page: { type: "integer", example: 2 },
+                limit: { type: "integer", example: 10 },
+                totalPages: { type: "integer", example: 12 }
+              }
+            }
+          }
+        },
+        ValidationError: {
+          type: "object",
+          properties: {
+            success: { type: "boolean", example: false },
+            errors: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  type: { type: "string", example: "field" },
+                  msg: { type: "string", example: "El nombre es obligatorio" },
+                  path: { type: "string", example: "name" },
+                  location: { type: "string", example: "body" }
+                }
+              }
+            }
+          }
+        },
+        ApiError: {
+          type: "object",
+          properties: {
+            success: { type: "boolean", example: false },
+            error: {
+              type: "object",
+              properties: {
+                message: { type: "string", example: "Descripcion del error" },
+                code: { type: "integer", example: 404 },
+                stack: { type: "string", example: "Visible only in development" },
+                details: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      field: { type: "string", example: "email" },
+                      message: { type: "string", example: "El email es obligatorio" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  apis: [path.join(__dirname, "../routes/*.js")]
+};
+
+const swaggerSpec = swaggerJsdoc(options);
+
+const setupSwagger = (app) => {
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
+};
+
+module.exports = { setupSwagger, swaggerSpec };
+</file>
+
+<file path="src/controllers/authController.js">
+const jwt = require("jsonwebtoken");
+
+const User = require("../models/User");
+const { sendSuccess } = require("../utils/apiResponse");
+
+const signToken = (user) =>
+  jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || "7d"
+  });
+
+const register = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      const error = new Error("El email ya esta registrado");
+      error.statusCode = 409;
+      throw error;
+    }
+
+    const isFirstUser = (await User.countDocuments()) === 0;
+    const role = isFirstUser && req.body.role === "admin" ? "admin" : "user";
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+      role
+    });
+
+    const token = signToken(user);
+
+    return sendSuccess(res, {
+      statusCode: 201,
+      message: "Usuario registrado correctamente",
+      data: {
+        user: user.toSafeObject(),
+        token
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user || !(await user.comparePassword(password))) {
+      const error = new Error("Credenciales invalidas");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    const token = signToken(user);
+
+    return sendSuccess(res, {
+      message: "Inicio de sesion exitoso",
+      data: {
+        user: user.toSafeObject(),
+        token
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  register,
+  login
+};
+</file>
+
+<file path="src/controllers/categoryController.js">
+const Category = require("../models/Category");
+const Product = require("../models/Product");
+const { sendSuccess } = require("../utils/apiResponse");
+
+const getCategories = async (req, res, next) => {
+  try {
+    const categories = await Category.find({ active: true }).sort({ name: 1 });
+
+    return sendSuccess(res, { data: categories });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getCategoryById = async (req, res, next) => {
+  try {
+    const category = await Category.findOne({ _id: req.params.id, active: true });
+
+    if (!category) {
+      const error = new Error("Categoria no encontrada");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const products = await Product.find({ category: category._id, active: true }).sort({ name: 1 });
+
+    return sendSuccess(res, {
+      data: {
+        category,
+        products
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const createCategory = async (req, res, next) => {
+  try {
+    const category = await Category.create({
+      name: req.body.name,
+      description: req.body.description,
+      active: req.body.active
+    });
+
+    return sendSuccess(res, {
+      statusCode: 201,
+      message: "Categoria creada correctamente",
+      data: category
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateCategory = async (req, res, next) => {
+  try {
+    const category = await Category.findOne({ _id: req.params.id, active: true });
+
+    if (!category) {
+      const error = new Error("Categoria no encontrada");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (req.body.name !== undefined) category.name = req.body.name;
+    if (req.body.description !== undefined) category.description = req.body.description;
+    if (req.body.active !== undefined) category.active = req.body.active;
+
+    await category.save();
+
+    return sendSuccess(res, {
+      message: "Categoria actualizada correctamente",
+      data: category
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteCategory = async (req, res, next) => {
+  try {
+    const category = await Category.findOne({ _id: req.params.id, active: true });
+
+    if (!category) {
+      const error = new Error("Categoria no encontrada");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const relatedProducts = await Product.countDocuments({ category: category._id });
+    if (relatedProducts > 0) {
+      const error = new Error("No se puede eliminar una categoria con productos asociados");
+      error.statusCode = 409;
+      throw error;
+    }
+
+    category.active = false;
+    await category.save();
+
+    return sendSuccess(res, {
+      message: "Categoria eliminada correctamente",
+      data: category
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  getCategories,
+  getCategoryById,
+  createCategory,
+  updateCategory,
+  deleteCategory
+};
+</file>
+
+<file path="src/controllers/productController.js">
+const Category = require("../models/Category");
+const Product = require("../models/Product");
+const buildProductFilter = require("../utils/buildFilter");
+const { sendSuccess } = require("../utils/apiResponse");
+
+const ensureCategoryExists = async (categoryId) => {
+  if (!categoryId) {
+    return null;
+  }
+
+  const category = await Category.findOne({ _id: categoryId, active: true });
+  if (!category) {
+    const error = new Error("Categoria no encontrada");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return category;
+};
+
+const listProducts = async (req, res, next) => {
+  try {
+    const { filter, sort } = buildProductFilter(req.query);
+    const { page, limit, skip } = req.pagination;
+
+    if (req.query.active === undefined) {
+      filter.active = true;
+    }
+
+    const [total, products] = await Promise.all([
+      Product.countDocuments(filter),
+      Product.find(filter)
+        .populate("category", "name slug")
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+    ]);
+
+    return sendSuccess(res, {
+      data: products,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: total === 0 ? 0 : Math.ceil(total / limit)
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getProductById = async (req, res, next) => {
+  try {
+    const product = await Product.findOne({ _id: req.params.id, active: true }).populate(
+      "category",
+      "name slug description"
+    );
+
+    if (!product) {
+      const error = new Error("Producto no encontrado");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    return sendSuccess(res, { data: product });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const createProduct = async (req, res, next) => {
+  try {
+    const { name, description, sku, price, stock, category, tags, active } = req.body;
+
+    const existingProduct = await Product.findOne({ sku });
+    if (existingProduct) {
+      const error = new Error("El SKU ya existe");
+      error.statusCode = 409;
+      throw error;
+    }
+
+    await ensureCategoryExists(category);
+
+    const product = await Product.create({
+      name,
+      description,
+      sku,
+      price,
+      stock,
+      category: category || null,
+      tags,
+      active
+    });
+
+    const populatedProduct = await Product.findById(product._id).populate("category", "name slug");
+
+    return sendSuccess(res, {
+      statusCode: 201,
+      message: "Producto creado correctamente",
+      data: populatedProduct
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findOne({ _id: req.params.id, active: true });
+
+    if (!product) {
+      const error = new Error("Producto no encontrado");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const { name, description, sku, price, stock, category, tags, active } = req.body;
+
+    if (sku && sku !== product.sku) {
+      const skuExists = await Product.findOne({ sku });
+      if (skuExists) {
+        const error = new Error("El SKU ya existe");
+        error.statusCode = 409;
+        throw error;
+      }
+    }
+
+    if (category !== undefined) {
+      await ensureCategoryExists(category);
+      product.category = category || null;
+    }
+
+    if (name !== undefined) product.name = name;
+    if (description !== undefined) product.description = description;
+    if (sku !== undefined) product.sku = sku;
+    if (price !== undefined) product.price = price;
+    if (stock !== undefined) product.stock = stock;
+    if (tags !== undefined) product.tags = tags;
+    if (active !== undefined) product.active = active;
+
+    await product.save();
+
+    const updatedProduct = await Product.findById(product._id).populate("category", "name slug");
+
+    return sendSuccess(res, {
+      message: "Producto actualizado correctamente",
+      data: updatedProduct
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findOne({ _id: req.params.id, active: true });
+
+    if (!product) {
+      const error = new Error("Producto no encontrado");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    product.active = false;
+    await product.save();
+
+    return sendSuccess(res, {
+      message: "Producto desactivado correctamente",
+      data: product
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateProductStock = async (req, res, next) => {
+  try {
+    const product = await Product.findOne({ _id: req.params.id, active: true });
+
+    if (!product) {
+      const error = new Error("Producto no encontrado");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    product.stock = req.body.stock;
+    await product.save();
+
+    return sendSuccess(res, {
+      message: "Stock actualizado correctamente",
+      data: product
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  listProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  updateProductStock
+};
+</file>
+
+<file path="src/middlewares/auth.js">
+const jwt = require("jsonwebtoken");
+
+const auth = (req, res, next) => {
+  try {
+    const authorization = req.headers.authorization || "";
+
+    if (!authorization.startsWith("Bearer ")) {
+      const error = new Error("Token de autenticacion requerido");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    const token = authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = {
+      id: decoded.id,
+      role: decoded.role
+    };
+
+    next();
+  } catch (error) {
+    if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+      error.statusCode = 401;
+      error.message = "Token invalido o expirado";
+    }
+
+    next(error);
+  }
+};
+
+const authorizeRoles = (...roles) => (req, res, next) => {
+  if (!req.user || !roles.includes(req.user.role)) {
+    const error = new Error("No autorizado para realizar esta accion");
+    error.statusCode = 403;
+    return next(error);
+  }
+
+  next();
+};
+
+module.exports = {
+  auth,
+  authorizeRoles
+};
+</file>
+
+<file path="src/middlewares/errorHandler.js">
+const { buildError } = require("../utils/apiResponse");
+
+const errorHandler = (err, req, res, next) => {
+  let statusCode = err.statusCode || 500;
+  let message = err.message || "Error interno del servidor";
+  let details;
+
+  if (err.name === "CastError") {
+    statusCode = 400;
+    message = "ID invalido";
+  }
+
+  if (err.code === 11000) {
+    statusCode = 409;
+    message = "Ya existe un registro con ese valor";
+    details = Object.entries(err.keyValue || {}).map(([field, value]) => ({
+      field,
+      message: `${field} duplicado: ${value}`
+    }));
+  }
+
+  if (err.name === "ValidationError") {
+    statusCode = 422;
+    message = "Error de validacion";
+    details = Object.values(err.errors).map((fieldError) => ({
+      field: fieldError.path,
+      message: fieldError.message
+    }));
+  }
+
+  if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
+    statusCode = 401;
+    message = "Token invalido o expirado";
+  }
+
+  res.status(statusCode).json(
+    buildError({
+      message,
+      code: statusCode,
+      stack: err.stack,
+      details
+    })
+  );
+};
+
+module.exports = errorHandler;
+</file>
+
+<file path="src/middlewares/paginate.js">
+module.exports = (req, res, next) => {
+  const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+  const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), 100);
+
+  req.pagination = {
+    page,
+    limit,
+    skip: (page - 1) * limit
+  };
+
+  next();
+};
+</file>
+
+<file path="src/middlewares/validate.js">
+const { validationResult } = require("express-validator");
+
+module.exports = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      success: false,
+      errors: errors.array()
+    });
+  }
+  next();
+};
+</file>
+
+<file path="src/models/Category.js">
+const mongoose = require("mongoose");
+const slugify = require("slugify");
+
+const categorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    default: "",
+    trim: true
+  },
+  slug: {
+    type: String,
+    unique: true
+  },
+  active: {
+    type: Boolean,
+    default: true
+  }
+});
+
+categorySchema.pre("save", function preSave(next) {
+  if (this.isModified("name")) {
+    this.slug = slugify(this.name, { lower: true, strict: true, trim: true });
+  }
+
+  next();
+});
+
+module.exports = mongoose.model("Category", categorySchema);
+</file>
+
+<file path="src/models/Product.js">
+const mongoose = require("mongoose");
+
+const productSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      default: "",
+      trim: true
+    },
+    sku: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    stock: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      default: null
+    },
+    tags: [
+      {
+        type: String,
+        trim: true
+      }
+    ],
+    active: {
+      type: Boolean,
+      default: true
+    }
+  },
+  {
+    timestamps: true
+  }
+);
+
+module.exports = mongoose.model("Product", productSchema);
+</file>
+
+<file path="src/models/User.js">
+const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user"
+    }
+  },
+  {
+    timestamps: { createdAt: true, updatedAt: false }
+  }
+);
+
+userSchema.pre("save", async function preSave(next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+userSchema.methods.comparePassword = function comparePassword(candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+userSchema.methods.toSafeObject = function toSafeObject() {
+  const userObject = this.toObject();
+  delete userObject.password;
+  return userObject;
+};
+
+module.exports = mongoose.model("User", userSchema);
+</file>
+
+<file path="src/routes/authRoutes.js">
+const express = require("express");
+const { body } = require("express-validator");
+
+const { login, register } = require("../controllers/authController");
+const validate = require("../middlewares/validate");
+
+const router = express.Router();
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Register a new user
+ *     description: Creates a new user and returns a JWT token. The first registered user may request the admin role.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterInput'
+ *           example:
+ *             name: Jane Doe
+ *             email: jane@stockpilot.dev
+ *             password: secret123
+ *             role: admin
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Usuario registrado correctamente
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *                     token:
+ *                       type: string
+ *                       example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+ *       409:
+ *         description: Duplicate email
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ */
+router.post(
+  "/register",
+  [
+    body("name")
+      .trim()
+      .notEmpty()
+      .withMessage("El nombre es obligatorio")
+      .isLength({ min: 2 })
+      .withMessage("El nombre debe tener al menos 2 caracteres"),
+    body("email").isEmail().withMessage("Debe ser un email valido").normalizeEmail(),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("La contrasena debe tener al menos 6 caracteres"),
+    body("role")
+      .optional()
+      .isIn(["admin", "user"])
+      .withMessage("El rol debe ser admin o user")
+  ],
+  validate,
+  register
+);
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Login user
+ *     description: Authenticates a user and returns a signed JWT token.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginInput'
+ *           example:
+ *             email: jane@stockpilot.dev
+ *             password: secret123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Inicio de sesion exitoso
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *                     token:
+ *                       type: string
+ *                       example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+ *       401:
+ *         description: Invalid credentials
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ */
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Debe ser un email valido").normalizeEmail(),
+    body("password").notEmpty().withMessage("La contrasena es obligatoria")
+  ],
+  validate,
+  login
+);
+
+module.exports = router;
+</file>
+
+<file path="src/routes/categoryRoutes.js">
+const express = require("express");
+const { body, param } = require("express-validator");
+
+const {
+  createCategory,
+  deleteCategory,
+  getCategories,
+  getCategoryById,
+  updateCategory
+} = require("../controllers/categoryController");
+const { auth, authorizeRoles } = require("../middlewares/auth");
+const validate = require("../middlewares/validate");
+
+const router = express.Router();
+
+const categoryCreateValidations = [
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("El nombre es obligatorio")
+    .isLength({ min: 2 })
+    .withMessage("El nombre debe tener al menos 2 caracteres"),
+  body("description").optional().isString().withMessage("La descripcion debe ser un texto"),
+  body("active").optional().isBoolean().withMessage("active debe ser booleano")
+];
+
+const categoryUpdateValidations = [
+  body("name")
+    .optional()
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("El nombre debe tener al menos 2 caracteres"),
+  body("description").optional().isString().withMessage("La descripcion debe ser un texto"),
+  body("active").optional().isBoolean().withMessage("active debe ser booleano")
+];
+
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     tags: [Categories]
+ *     summary: List categories
+ *     description: Returns all active categories.
+ *     responses:
+ *       200:
+ *         description: Categories retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *   post:
+ *     tags: [Categories]
+ *     summary: Create a category
+ *     description: Creates a new category. Admin only.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CategoryInput'
+ *           example:
+ *             name: Electronics
+ *             description: Devices and gadgets
+ *     responses:
+ *       201:
+ *         description: Category created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       409:
+ *         description: Duplicate category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ */
+router
+  .route("/")
+  .get(getCategories)
+  .post(auth, authorizeRoles("admin"), categoryCreateValidations, validate, createCategory);
+
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   get:
+ *     tags: [Categories]
+ *     summary: Get category with products
+ *     description: Returns one active category and its active products.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category ObjectId
+ *     responses:
+ *       200:
+ *         description: Category retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: Invalid category id
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       404:
+ *         description: Category not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *   put:
+ *     tags: [Categories]
+ *     summary: Update a category
+ *     description: Updates an active category. Admin only.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CategoryInput'
+ *     responses:
+ *       200:
+ *         description: Category updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       404:
+ *         description: Category not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       409:
+ *         description: Duplicate category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *   delete:
+ *     tags: [Categories]
+ *     summary: Delete a category
+ *     description: Soft deletes a category only if it has no associated products. Admin only.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Category deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       404:
+ *         description: Category not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       409:
+ *         description: Category still has products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ */
+router
+  .route("/:id")
+  .get([param("id").isMongoId().withMessage("ID de categoria invalido")], validate, getCategoryById)
+  .put(
+    auth,
+    authorizeRoles("admin"),
+    [param("id").isMongoId().withMessage("ID de categoria invalido"), ...categoryUpdateValidations],
+    validate,
+    updateCategory
+  )
+  .delete(
+    auth,
+    authorizeRoles("admin"),
+    [param("id").isMongoId().withMessage("ID de categoria invalido")],
+    validate,
+    deleteCategory
+  );
+
+module.exports = router;
+</file>
+
+<file path="src/routes/productRoutes.js">
+const express = require("express");
+const { body, param, query } = require("express-validator");
+
+const {
+  createProduct,
+  deleteProduct,
+  getProductById,
+  listProducts,
+  updateProduct,
+  updateProductStock
+} = require("../controllers/productController");
+const { auth, authorizeRoles } = require("../middlewares/auth");
+const paginate = require("../middlewares/paginate");
+const validate = require("../middlewares/validate");
+
+const router = express.Router();
+
+const productCreateValidations = [
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("El nombre es obligatorio")
+    .isLength({ min: 2 })
+    .withMessage("El nombre debe tener al menos 2 caracteres"),
+  body("description").optional().isString().withMessage("La descripcion debe ser un texto"),
+  body("sku").trim().notEmpty().withMessage("El SKU es obligatorio"),
+  body("price")
+    .notEmpty()
+    .withMessage("El precio es obligatorio")
+    .isFloat({ min: 0 })
+    .withMessage("El precio debe ser un numero mayor o igual a 0"),
+  body("stock")
+    .notEmpty()
+    .withMessage("El stock es obligatorio")
+    .isInt({ min: 0 })
+    .withMessage("El stock debe ser un entero mayor o igual a 0"),
+  body("category")
+    .optional({ nullable: true })
+    .isMongoId()
+    .withMessage("La categoria debe ser un ID valido"),
+  body("tags").optional().isArray().withMessage("Tags debe ser un arreglo"),
+  body("tags.*").optional().isString().withMessage("Cada tag debe ser texto"),
+  body("active").optional().isBoolean().withMessage("active debe ser booleano")
+];
+
+const productUpdateValidations = [
+  body("name")
+    .optional()
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("El nombre debe tener al menos 2 caracteres"),
+  body("description").optional().isString().withMessage("La descripcion debe ser un texto"),
+  body("sku").optional().trim().notEmpty().withMessage("El SKU no puede estar vacio"),
+  body("price")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("El precio debe ser un numero mayor o igual a 0"),
+  body("stock")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("El stock debe ser un entero mayor o igual a 0"),
+  body("category")
+    .optional({ nullable: true })
+    .isMongoId()
+    .withMessage("La categoria debe ser un ID valido"),
+  body("tags").optional().isArray().withMessage("Tags debe ser un arreglo"),
+  body("tags.*").optional().isString().withMessage("Cada tag debe ser texto"),
+  body("active").optional().isBoolean().withMessage("active debe ser booleano")
+];
+
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     tags: [Products]
+ *     summary: List products
+ *     description: Returns a paginated list of products with filters, search, and sorting.
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: Items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Regex search by name or description
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Category ObjectId
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Minimum price
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Maximum price
+ *       - in: query
+ *         name: minStock
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *         description: Minimum stock
+ *       - in: query
+ *         name: maxStock
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *         description: Maximum stock
+ *       - in: query
+ *         name: active
+ *         schema:
+ *           type: boolean
+ *         description: Filter active or inactive products
+ *       - in: query
+ *         name: tags
+ *         schema:
+ *           type: string
+ *           example: electronics,offer
+ *         description: Comma-separated tags
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [name, price, stock, createdAt, updatedAt]
+ *         description: Sorting field
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *         description: Sort direction
+ *     responses:
+ *       200:
+ *         description: Products retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PaginatedProductsResponse'
+ *       400:
+ *         description: Invalid query parameters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *   post:
+ *     tags: [Products]
+ *     summary: Create a product
+ *     description: Creates a new product. Admin only.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductInput'
+ *           example:
+ *             name: Mechanical Keyboard
+ *             description: Compact 75% wireless keyboard
+ *             sku: KEY-001
+ *             price: 129.99
+ *             stock: 25
+ *             category: 664383f53d7f95fb678e4144
+ *             tags:
+ *               - electronics
+ *               - offer
+ *     responses:
+ *       201:
+ *         description: Product created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       404:
+ *         description: Category not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       409:
+ *         description: Duplicate SKU
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ */
+router
+  .route("/")
+  .get(
+    [
+      query("page").optional().isInt({ min: 1 }).withMessage("page debe ser un entero positivo"),
+      query("limit")
+        .optional()
+        .isInt({ min: 1, max: 100 })
+        .withMessage("limit debe estar entre 1 y 100"),
+      query("search").optional().isString().withMessage("search debe ser texto"),
+      query("category")
+        .optional()
+        .isMongoId()
+        .withMessage("category debe ser un ID valido"),
+      query("minPrice")
+        .optional()
+        .isFloat({ min: 0 })
+        .withMessage("minPrice debe ser un numero mayor o igual a 0"),
+      query("maxPrice")
+        .optional()
+        .isFloat({ min: 0 })
+        .withMessage("maxPrice debe ser un numero mayor o igual a 0"),
+      query("minStock")
+        .optional()
+        .isInt({ min: 0 })
+        .withMessage("minStock debe ser un entero mayor o igual a 0"),
+      query("maxStock")
+        .optional()
+        .isInt({ min: 0 })
+        .withMessage("maxStock debe ser un entero mayor o igual a 0"),
+      query("active")
+        .optional()
+        .isIn(["true", "false"])
+        .withMessage("active debe ser true o false"),
+      query("tags").optional().isString().withMessage("tags debe ser una cadena"),
+      query("sort")
+        .optional()
+        .isIn(["name", "price", "stock", "createdAt", "updatedAt"])
+        .withMessage("sort no es valido"),
+      query("order").optional().isIn(["asc", "desc"]).withMessage("order debe ser asc o desc")
+    ],
+    validate,
+    paginate,
+    listProducts
+  )
+  .post(auth, authorizeRoles("admin"), productCreateValidations, validate, createProduct);
+
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   get:
+ *     tags: [Products]
+ *     summary: Get one product
+ *     description: Returns one active product by id.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ObjectId
+ *     responses:
+ *       200:
+ *         description: Product retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: Invalid product id
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *   put:
+ *     tags: [Products]
+ *     summary: Update a product
+ *     description: Updates an existing product. Admin only.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductInput'
+ *     responses:
+ *       200:
+ *         description: Product updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       404:
+ *         description: Product or category not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       409:
+ *         description: Duplicate SKU
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *   delete:
+ *     tags: [Products]
+ *     summary: Soft delete a product
+ *     description: Marks a product as inactive. Admin only.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Product deactivated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ */
+router
+  .route("/:id")
+  .get([param("id").isMongoId().withMessage("ID de producto invalido")], validate, getProductById)
+  .put(
+    auth,
+    authorizeRoles("admin"),
+    [param("id").isMongoId().withMessage("ID de producto invalido"), ...productUpdateValidations],
+    validate,
+    updateProduct
+  )
+  .delete(
+    auth,
+    authorizeRoles("admin"),
+    [param("id").isMongoId().withMessage("ID de producto invalido")],
+    validate,
+    deleteProduct
+  );
+
+/**
+ * @swagger
+ * /api/products/{id}/stock:
+ *   patch:
+ *     tags: [Products]
+ *     summary: Update only product stock
+ *     description: Updates the stock field of an active product. Admin only.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ObjectId
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/StockUpdateInput'
+ *           example:
+ *             stock: 42
+ *     responses:
+ *       200:
+ *         description: Stock updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ */
+router.patch(
+  "/:id/stock",
+  auth,
+  authorizeRoles("admin"),
+  [
+    param("id").isMongoId().withMessage("ID de producto invalido"),
+    body("stock")
+      .notEmpty()
+      .withMessage("El stock es obligatorio")
+      .isInt({ min: 0 })
+      .withMessage("El stock debe ser un entero mayor o igual a 0")
+  ],
+  validate,
+  updateProductStock
+);
+
+module.exports = router;
+</file>
+
+<file path="src/utils/apiResponse.js">
+const sendSuccess = (res, { statusCode = 200, message, data = null, pagination } = {}) => {
+  const payload = {
+    success: true,
+    data
+  };
+
+  if (message) {
+    payload.message = message;
+  }
+
+  if (pagination) {
+    payload.pagination = pagination;
+  }
+
+  return res.status(statusCode).json(payload);
+};
+
+const buildError = ({ message = "Error interno del servidor", code = 500, stack, details } = {}) => {
+  const error = {
+    message,
+    code
+  };
+
+  if (details) {
+    error.details = details;
+  }
+
+  if (stack && process.env.NODE_ENV === "development") {
+    error.stack = stack;
+  }
+
+  return {
+    success: false,
+    error
+  };
+};
+
+const sendError = (res, options = {}) => {
+  const { code = 500 } = options;
+  return res.status(code).json(buildError(options));
+};
+
+module.exports = {
+  sendSuccess,
+  buildError,
+  sendError
+};
+</file>
+
+<file path="src/utils/buildFilter.js">
+const parseNumber = (value) => {
+  if (value === undefined || value === null || value === "") {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+  return Number.isNaN(parsed) ? undefined : parsed;
+};
+
+const buildProductFilter = (query = {}) => {
+  const filter = {};
+  const allowedSortFields = ["name", "price", "stock", "createdAt", "updatedAt"];
+
+  if (query.search) {
+    filter.$or = [
+      { name: { $regex: query.search, $options: "i" } },
+      { description: { $regex: query.search, $options: "i" } }
+    ];
+  }
+
+  if (query.category) {
+    filter.category = query.category;
+  }
+
+  if (query.active === "true") {
+    filter.active = true;
+  }
+
+  if (query.active === "false") {
+    filter.active = false;
+  }
+
+  if (query.tags) {
+    const tags = query.tags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+
+    if (tags.length > 0) {
+      filter.tags = { $in: tags };
+    }
+  }
+
+  const minPrice = parseNumber(query.minPrice);
+  const maxPrice = parseNumber(query.maxPrice);
+  if (minPrice !== undefined || maxPrice !== undefined) {
+    filter.price = {};
+
+    if (minPrice !== undefined) {
+      filter.price.$gte = minPrice;
+    }
+
+    if (maxPrice !== undefined) {
+      filter.price.$lte = maxPrice;
+    }
+  }
+
+  const minStock = parseNumber(query.minStock);
+  const maxStock = parseNumber(query.maxStock);
+  if (minStock !== undefined || maxStock !== undefined) {
+    filter.stock = {};
+
+    if (minStock !== undefined) {
+      filter.stock.$gte = minStock;
+    }
+
+    if (maxStock !== undefined) {
+      filter.stock.$lte = maxStock;
+    }
+  }
+
+  const sortField = allowedSortFields.includes(query.sort) ? query.sort : "createdAt";
+  const sortOrder = query.order === "asc" ? 1 : -1;
+
+  return {
+    filter,
+    sort: {
+      [sortField]: sortOrder
+    }
+  };
+};
+
+module.exports = buildProductFilter;
+</file>
+
+</files>
